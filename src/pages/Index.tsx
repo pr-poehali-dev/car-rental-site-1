@@ -1,332 +1,288 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
 
 const Index = () => {
-  const [pickupDate, setPickupDate] = useState<Date>();
-  const [returnDate, setReturnDate] = useState<Date>();
+  const [selectedCar, setSelectedCar] = useState<number | null>(null);
+  const [playerName, setPlayerName] = useState('');
+  const [rentalTime, setRentalTime] = useState('');
 
   const cars = [
     {
       id: 1,
-      name: 'BMW 3 Series',
-      category: 'Бизнес',
-      price: '3500',
-      image: '/img/c01771e2-520f-4782-847e-505961e63e32.jpg',
-      features: ['Автомат', 'Кондиционер', 'GPS']
+      name: 'Pegassi Zentorno',
+      category: 'Суперкар',
+      price: '2500',
+      deposit: '5000',
+      image: '/img/15a7daf7-df86-4e3c-b8e7-7ab3c84be2fd.jpg',
+      stats: { speed: '★★★★★', handling: '★★★★☆', acceleration: '★★★★★' }
     },
     {
       id: 2,
-      name: 'Range Rover Evoque',
-      category: 'SUV',
-      price: '5200',
-      image: '/img/683942ab-8c0d-4af5-b9b9-6ad78af5aff6.jpg',
-      features: ['Полный привод', 'Кожа', 'Премиум']
+      name: 'Shitzu Hakuchou',
+      category: 'Мотоцикл',
+      price: '800',
+      deposit: '1500',
+      image: '/img/2c4c66d8-c551-4014-984b-6bdca82d6bc1.jpg',
+      stats: { speed: '★★★★☆', handling: '★★★★★', acceleration: '★★★★★' }
     },
     {
       id: 3,
-      name: 'Ferrari 488',
-      category: 'Спорт',
-      price: '12000',
-      image: '/img/4461fb82-291c-4bc0-96e6-dbc0803a9862.jpg',
-      features: ['V8', 'Спортивный', 'Эксклюзив']
+      name: 'Declasse Vigero',
+      category: 'Мускулкар',
+      price: '1200',
+      deposit: '2000',
+      image: '/img/3fb6c0eb-f674-4a7d-b7ef-cea8a47d1f37.jpg',
+      stats: { speed: '★★★☆☆', handling: '★★★☆☆', acceleration: '★★★★☆' }
     }
   ];
 
+  const handleRent = (carId: number) => {
+    setSelectedCar(carId);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-green-900">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2">
-              <Icon name="Car" size={32} className="text-primary" />
-              <h1 className="text-2xl font-inter font-bold text-slate-900">AutoRent</h1>
+      <header className="bg-slate-900/90 backdrop-blur-sm border-b border-green-500/20 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                <Icon name="Car" size={24} className="text-black" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">GTA V AUTO RENT</h1>
+                <p className="text-xs text-green-400">Los Santos Rental Service</p>
+              </div>
             </div>
-            <nav className="hidden md:flex space-x-8">
-              <a href="#" className="font-open-sans text-slate-700 hover:text-primary transition-colors">Главная</a>
-              <a href="#cars" className="font-open-sans text-slate-700 hover:text-primary transition-colors">Автопарк</a>
-              <a href="#booking" className="font-open-sans text-slate-700 hover:text-primary transition-colors">Бронирование</a>
-              <a href="#about" className="font-open-sans text-slate-700 hover:text-primary transition-colors">О нас</a>
-              <a href="#contact" className="font-open-sans text-slate-700 hover:text-primary transition-colors">Контакты</a>
-            </nav>
-            <Button className="font-open-sans">
-              <Icon name="Phone" size={16} className="mr-2" />
-              +7 (495) 123-45-67
-            </Button>
+            <div className="text-right">
+              <p className="text-green-400 text-sm">Online: 247 игроков</p>
+              <p className="text-white text-xs">Server: LS-RP #1</p>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl md:text-6xl font-inter font-bold text-slate-900 mb-6">
-              Аренда автомобилей
-              <span className="block text-primary">премиум класса</span>
-            </h2>
-            <p className="text-xl font-open-sans text-slate-600 max-w-2xl mx-auto">
-              Широкий выбор автомобилей для любых целей. Быстрое оформление, прозрачные цены, круглосуточная поддержка.
-            </p>
+      {/* Hero */}
+      <section className="py-12 text-center">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            🚗 АРЕНДА ТРАНСПОРТА
+          </h2>
+          <p className="text-xl text-gray-300 mb-2">
+            Лучшие тачки Los Santos для твоих RP приключений
+          </p>
+          <div className="flex justify-center items-center space-x-4 text-green-400">
+            <span>💰 Низкие цены</span>
+            <span>⚡ Быстрая выдача</span>
+            <span>🔧 Все авто исправны</span>
           </div>
+        </div>
+      </section>
 
-          {/* Quick Search */}
-          <Card className="max-w-4xl mx-auto shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <Label className="font-open-sans font-medium">Город получения</Label>
-                  <div className="relative">
-                    <Icon name="MapPin" size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-                    <Input 
-                      placeholder="Москва" 
-                      className="pl-10 font-open-sans border-slate-200 focus:border-primary"
+      {/* Cars Grid */}
+      <section className="py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <h3 className="text-2xl font-bold text-white mb-8 text-center">
+            🏁 ДОСТУПНЫЙ ТРАНСПОРТ
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {cars.map((car) => (
+              <Card key={car.id} className="bg-slate-800/80 border-slate-700 hover:border-green-500/50 transition-all group">
+                <CardHeader className="pb-3">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img 
+                      src={car.image} 
+                      alt={car.name}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
                     />
+                    <Badge className="absolute top-2 left-2 bg-green-600 text-black font-bold">
+                      {car.category}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="text-xl font-bold text-white">{car.name}</h4>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between text-gray-300">
+                      <span>Скорость:</span>
+                      <span className="text-yellow-400">{car.stats.speed}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span>Управление:</span>
+                      <span className="text-yellow-400">{car.stats.handling}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span>Разгон:</span>
+                      <span className="text-yellow-400">{car.stats.acceleration}</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900/50 p-3 rounded-lg">
+                    <div className="flex justify-between items-center text-sm mb-2">
+                      <span className="text-gray-300">Аренда/час:</span>
+                      <span className="text-green-400 font-bold">${car.price}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-300">Залог:</span>
+                      <span className="text-yellow-400 font-bold">${car.deposit}</span>
+                    </div>
+                  </div>
+
+                  <Button 
+                    onClick={() => handleRent(car.id)}
+                    className="w-full bg-green-600 hover:bg-green-500 text-black font-bold"
+                  >
+                    🔑 АРЕНДОВАТЬ
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Rental Form */}
+      {selectedCar && (
+        <section className="py-8 bg-slate-900/50">
+          <div className="max-w-2xl mx-auto px-4">
+            <Card className="bg-slate-800 border-green-500">
+              <CardHeader>
+                <CardTitle className="text-white text-center">
+                  🚗 ФОРМА АРЕНДЫ ТРАНСПОРТА
+                </CardTitle>
+                <p className="text-center text-gray-300">
+                  Выбран: {cars.find(car => car.id === selectedCar)?.name}
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-white">Имя персонажа в игре</Label>
+                  <Input 
+                    placeholder="John_Smith"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    className="bg-slate-700 border-slate-600 text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-white">Время аренды</Label>
+                  <Select value={rentalTime} onValueChange={setRentalTime}>
+                    <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                      <SelectValue placeholder="Выберите время" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1h">1 час</SelectItem>
+                      <SelectItem value="3h">3 часа</SelectItem>
+                      <SelectItem value="6h">6 часов</SelectItem>
+                      <SelectItem value="12h">12 часов</SelectItem>
+                      <SelectItem value="24h">24 часа</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="bg-slate-900/80 p-4 rounded-lg">
+                  <h5 className="text-white font-bold mb-2">💰 Стоимость:</h5>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between text-gray-300">
+                      <span>Аренда:</span>
+                      <span className="text-green-400">${cars.find(car => car.id === selectedCar)?.price}/час</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span>Залог:</span>
+                      <span className="text-yellow-400">${cars.find(car => car.id === selectedCar)?.deposit}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="font-open-sans font-medium">Дата получения</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-open-sans border-slate-200 focus:border-primary"
-                      >
-                        <Icon name="Calendar" size={18} className="mr-2 text-slate-400" />
-                        {pickupDate ? format(pickupDate, 'dd MMM yyyy', { locale: ru }) : 'Выберите дату'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={pickupDate}
-                        onSelect={setPickupDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-500 text-black font-bold text-lg py-3">
+                  💳 ПОДТВЕРДИТЬ АРЕНДУ
+                </Button>
 
-                <div className="space-y-2">
-                  <Label className="font-open-sans font-medium">Дата возврата</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-open-sans border-slate-200 focus:border-primary"
-                      >
-                        <Icon name="Calendar" size={18} className="mr-2 text-slate-400" />
-                        {returnDate ? format(returnDate, 'dd MMM yyyy', { locale: ru }) : 'Выберите дату'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={returnDate}
-                        onSelect={setReturnDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSelectedCar(null)}
+                  className="w-full border-slate-600 text-white hover:bg-slate-700"
+                >
+                  ❌ Отмена
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      )}
+
+      {/* Rules */}
+      <section className="py-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <Card className="bg-slate-800/80 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white text-center">📋 ПРАВИЛА АРЕНДЫ</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div>
+                  <h5 className="text-green-400 font-bold mb-2">✅ РАЗРЕШЕНО:</h5>
+                  <ul className="space-y-1 text-gray-300">
+                    <li>• Использование для RP ситуаций</li>
+                    <li>• Участие в легальных гонках</li>
+                    <li>• Поездки по городу</li>
+                    <li>• Перевозка пассажиров</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="text-red-400 font-bold mb-2">❌ ЗАПРЕЩЕНО:</h5>
+                  <ul className="space-y-1 text-gray-300">
+                    <li>• Участие в преступлениях</li>
+                    <li>• Передача другим игрокам</li>
+                    <li>• Умышленное повреждение</li>
+                    <li>• Выезд за пределы карты</li>
+                  </ul>
                 </div>
               </div>
-
-              <Button size="lg" className="w-full mt-6 text-lg font-open-sans font-medium">
-                <Icon name="Search" size={20} className="mr-2" />
-                Найти автомобиль
-              </Button>
+              
+              <div className="mt-6 p-4 bg-yellow-900/30 border border-yellow-600 rounded-lg">
+                <p className="text-yellow-200 text-sm">
+                  ⚠️ <strong>ВНИМАНИЕ:</strong> При нарушении правил залог не возвращается. 
+                  Транспорт автоматически возвращается в автопарк через указанное время.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
       </section>
 
-      {/* Popular Cars */}
-      <section id="cars" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-inter font-bold text-slate-900 mb-4">
-              Популярные автомобили
-            </h3>
-            <p className="text-lg font-open-sans text-slate-600">
-              Выберите идеальный автомобиль для ваших потребностей
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cars.map((car) => (
-              <Card key={car.id} className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg overflow-hidden">
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={car.image} 
-                    alt={car.name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <Badge className="absolute top-4 left-4 bg-primary text-white font-open-sans">
-                    {car.category}
-                  </Badge>
-                </div>
-                <CardContent className="p-6">
-                  <h4 className="text-xl font-inter font-bold text-slate-900 mb-2">{car.name}</h4>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {car.features.map((feature, index) => (
-                      <Badge key={index} variant="secondary" className="font-open-sans text-xs">
-                        {feature}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-2xl font-inter font-bold text-primary">₽{car.price}</span>
-                      <span className="text-slate-500 font-open-sans">/день</span>
-                    </div>
-                    <Button className="font-open-sans">
-                      Забронировать
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-inter font-bold text-slate-900 mb-4">
-              Наши преимущества
-            </h3>
-            <p className="text-lg font-open-sans text-slate-600">
-              Почему выбирают именно нас
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: 'Clock',
-                title: '24/7 Поддержка',
-                description: 'Круглосуточная техническая поддержка и помощь на дороге'
-              },
-              {
-                icon: 'Shield',
-                title: 'Полная страховка',
-                description: 'Все автомобили застрахованы по программе КАСКО'
-              },
-              {
-                icon: 'MapPin',
-                title: 'Удобные локации',
-                description: 'Офисы в центре города и в аэропорту для вашего удобства'
-              },
-              {
-                icon: 'Star',
-                title: 'Премиум сервис',
-                description: 'Высокое качество обслуживания и чистые автомобили'
-              }
-            ].map((service, index) => (
-              <Card key={index} className="text-center p-6 border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Icon name={service.icon as any} size={32} className="text-primary" />
-                  </div>
-                  <h4 className="text-lg font-inter font-bold text-slate-900 mb-2">{service.title}</h4>
-                  <p className="font-open-sans text-slate-600">{service.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h3 className="text-4xl font-inter font-bold mb-4">
-            Готовы к поездке?
-          </h3>
-          <p className="text-xl font-open-sans mb-8 opacity-90">
-            Забронируйте автомобиль прямо сейчас и получите скидку 10% на первую аренду
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-primary font-open-sans font-medium">
-              <Icon name="Phone" size={20} className="mr-2" />
-              Позвонить сейчас
-            </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary font-open-sans font-medium">
-              <Icon name="MessageSquare" size={20} className="mr-2" />
-              Написать в WhatsApp
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Icon name="Car" size={24} className="text-primary" />
-                <h4 className="text-xl font-inter font-bold">AutoRent</h4>
-              </div>
-              <p className="font-open-sans text-slate-400">
-                Лидер в сфере аренды автомобилей премиум класса в России
-              </p>
+      <footer className="bg-slate-900 text-center py-8 border-t border-green-500/20">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex justify-center items-center space-x-6 mb-4">
+            <div className="text-center">
+              <p className="text-green-400 font-bold">🎮 DISCORD</p>
+              <p className="text-white text-sm">discord.gg/lsrp</p>
             </div>
-            
-            <div>
-              <h5 className="font-inter font-semibold mb-4">Услуги</h5>
-              <ul className="space-y-2 font-open-sans text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">Аренда автомобилей</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Трансферы</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Долгосрочная аренда</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Корпоративным клиентам</a></li>
-              </ul>
+            <div className="text-center">
+              <p className="text-green-400 font-bold">🌐 САЙТ</p>
+              <p className="text-white text-sm">ls-rp.ru</p>
             </div>
-            
-            <div>
-              <h5 className="font-inter font-semibold mb-4">Компания</h5>
-              <ul className="space-y-2 font-open-sans text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">О нас</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Вакансии</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Отзывы</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Контакты</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h5 className="font-inter font-semibold mb-4">Контакты</h5>
-              <div className="space-y-3 font-open-sans text-slate-400">
-                <div className="flex items-center space-x-2">
-                  <Icon name="Phone" size={16} />
-                  <span>+7 (495) 123-45-67</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Icon name="Mail" size={16} />
-                  <span>info@autorent.ru</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Icon name="MapPin" size={16} />
-                  <span>Москва, ул. Тверская, 1</span>
-                </div>
-              </div>
+            <div className="text-center">
+              <p className="text-green-400 font-bold">📧 ПОДДЕРЖКА</p>
+              <p className="text-white text-sm">support@ls-rp.ru</p>
             </div>
           </div>
-          
-          <div className="border-t border-slate-800 mt-12 pt-8 text-center font-open-sans text-slate-400">
-            <p>&copy; 2024 AutoRent. Все права защищены.</p>
-          </div>
+          <p className="text-gray-400 text-sm">
+            © 2024 LS-RP Server | Все права защищены | Made for GTA V Roleplay
+          </p>
         </div>
       </footer>
     </div>
